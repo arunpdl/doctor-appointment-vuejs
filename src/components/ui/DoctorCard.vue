@@ -17,11 +17,11 @@
           <h3 class="text-sm font-medium">Available on:</h3>
           <div class="flex flex-wrap gap-2">
             <div
-              v-for="(schedule, index) in doctor.schedules"
+              v-for="(day, index) in uniqueDays"
               :key="index"
               class="text-xs bg-gray-200 px-2 py-1 rounded-full"
             >
-              {{ schedule.day_of_week }}
+              {{ day }}
             </div>
           </div>
         </div>
@@ -38,11 +38,16 @@
 import DoctorAvatar from '@/assets/icons/doctor-avatar.svg'
 import GlobeIcon from '@/assets/icons/globe.svg'
 import type { Doctor } from '@/types/doctors'
+import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 import BaseButton from './BaseButton.vue'
 
 const { doctor } = defineProps<{ doctor: Doctor }>()
 const router = useRouter()
+
+const uniqueDays = computed(() => {
+  return Array.from(new Set(doctor.schedules.map((schedule) => schedule.day_of_week)))
+})
 
 const handleViewAvailability = (doctorName: string) => {
   router.push({

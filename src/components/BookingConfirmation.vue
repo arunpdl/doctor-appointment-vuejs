@@ -32,8 +32,8 @@
       <p class="text-gray-400 mt-2">Your appointment has been successfully scheduled</p>
     </div>
 
-    <div class="border-t mt-6 pt-6">
-      <div class="pt-6">
+    <div class="mt-6 py-6 border border-gray-300 rounded-md shadow px-4">
+      <div class="">
         <h2 class="font-semibold mb-4">Appointment Details</h2>
 
         <div class="space-y-4">
@@ -58,7 +58,7 @@
           </div>
         </div>
 
-        <div class="border-t mt-6 pt-6">
+        <div class="border-t border-gray-300 mt-6 pt-6">
           <p class="text-sm text-gray-400 mb-2">
             Please arrive 15 minutes before your scheduled appointment time.
           </p>
@@ -83,20 +83,26 @@
 <script setup lang="ts">
 import BackIcon from '@/assets/icons/back.svg'
 import { formatAppointmentDate } from '@/utils/appointmentHelper'
+import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import BaseButton from './ui/BaseButton.vue'
 
 const route = useRoute()
 const router = useRouter()
 
-const doctorName = Array.isArray(route.query.doctor) ? route.query.doctor[0] : route.query.doctor
-const date = Array.isArray(route.query.date) ? route.query.date[0] : route.query.date
-const time = Array.isArray(route.query.time) ? route.query.time[0] : route.query.time
-const timezone = Array.isArray(route.query.timezone)
-  ? route.query.timezone[0]
-  : route.query.timezone
-
-const formattedDate = date ? formatAppointmentDate(date) : ''
+const doctorName = computed(() =>
+  Array.isArray(route.query.doctor) ? route.query.doctor[0] : route.query.doctor,
+)
+const date = computed(() =>
+  Array.isArray(route.query.date) ? route.query.date[0] : route.query.date,
+)
+const time = computed(() =>
+  Array.isArray(route.query.time) ? route.query.time[0] : route.query.time,
+)
+const timezone = computed(() =>
+  Array.isArray(route.query.timezone) ? route.query.timezone[0] : route.query.timezone,
+)
+const formattedDate = computed(() => (date.value ? formatAppointmentDate(date.value) : ''))
 
 const handleViewAppointments = () => {
   router.push({

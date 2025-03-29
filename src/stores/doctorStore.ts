@@ -67,8 +67,8 @@ export const useDoctorStore = defineStore('doctors', () => {
 
     const availableDays = doctor.schedules.map((s) => s.day_of_week)
 
-    // For coming 14 days
-    for (let i = 0; i < 14; i++) {
+    // For coming 7 days
+    for (let i = 0; i < 7; i++) {
       const date = addDays(new Date(), i)
       const dayOfWeek = days[date.getDay()]
 

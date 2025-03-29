@@ -11,8 +11,9 @@
       <div
         v-for="time in availableTimeSlots"
         :key="time"
-        :class="`h-auto p-3 justify-start border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-300 transition ease-in-out ${selectedTime === time ? 'bg-gray-500 text-white' : ''}`"
-        @click="handleSelectTime(time)"
+        :class="`h-auto p-3 justify-start border border-gray-200 rounded-lg transition ease-in-out ${selectedTime === time ? 'bg-gray-500 text-white' : ''} ${isPastTime(time) ? 'text-gray-400 cursor-not-allowed' : 'hover:bg-gray-300 cursor-pointer'}`"
+        @click="onSelectTime(time)"
+        @disabled="isPastTime(time)"
       >
         {{ time }}
       </div>
@@ -24,9 +25,21 @@
 <script setup lang="ts">
 import ClockIcon from '@/assets/icons/clock.svg'
 
-const { availableTimeSlots, selectedTime, handleSelectTime } = defineProps<{
+const { availableTimeSlots, selectedTime, handleSelectTime, selectedDate } = defineProps<{
   availableTimeSlots: string[]
   selectedTime: string | null
+  selectedDate: string | null
   handleSelectTime: (time: string) => void
 }>()
+
+const onSelectTime = (time: string) => {
+  if (isPastTime(time)) return
+  handleSelectTime(time)
+}
+
+const isPastTime = (time: string) => {
+  if (!selectedDate || !time) return false
+  const selectedDateTime = new Date(`${selectedDate} ${time}`)
+  return selectedDateTime < new Date()
+}
 </script>

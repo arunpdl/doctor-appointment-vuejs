@@ -76,10 +76,10 @@ const handleBookAppointment = () => {
     router.push({
       name: 'BookingConfirmation',
       query: {
-        doctor: doctor.value?.name,
+        doctor: doctor.value.name,
         date: selectedDate.value,
         time: selectedTime.value,
-        timezone: doctor.value?.timezone,
+        timezone: doctor.value.timezone,
       },
     })
   }
@@ -120,6 +120,7 @@ const handleBookAppointment = () => {
         v-if="selectedDate"
         :availableTimeSlots="availableTimeSlots"
         :selectedTime="selectedTime"
+        :selectedDate="selectedDate"
         :handleSelectTime="handleSelectTime"
       />
       <BaseButton
