@@ -1,6 +1,6 @@
 {
-  "name": "shiftcare-app",
-  "version": "0.0.0",
+  "name": "appointment-booking-system",
+  "version": "1.0.0",
   "private": true,
   "type": "module",
   "scripts": {
