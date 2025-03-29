@@ -4,8 +4,8 @@ import TopNavBar from '@/components/Navbar/TopNavbar.vue'
 </script>
 
 <template>
-  <div class="container mx-auto px-2 py-4">
-    <TopNavBar />
+  <TopNavBar />
+  <div class="container mx-auto px-2 py-8">
     <RouterView />
   </div>
 </template>

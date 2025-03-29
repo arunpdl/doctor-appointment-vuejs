@@ -19,3 +19,16 @@ export function parseTime(timeStr: string) {
 
   return date
 }
+
+export function generateAppointmentId() {
+  return Math.random().toString(36).slice(2)
+}
+
+export function formatAppointmentDate(dateString: string) {
+  return new Date(dateString).toLocaleDateString('en-US', {
+    weekday: 'long',
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric',
+  })
+}

@@ -1,28 +1,16 @@
 <template>
-  <div class="doctor-list">
-    <div class="text-3xl text-center">Available Doctors</div>
-    <div v-if="isLoading" class="text-2xl">Loading doctors...</div>
+  <div class="flex flex-col gap-8">
+    <div class="text-3xl mb-8 text-center">Available Doctors</div>
+    <SpinnerComponent v-if="isLoading" size="large" />
 
-    <div v-else-if="error" class="error">Error: {{ error }}</div>
-    <div v-else class="doctors">
-      <div v-for="doctor in doctors" :key="doctor.name" class="doctor-card">
-        <h3>{{ doctor.name }}</h3>
-        <p class="timezone">Timezone: {{ doctor.timezone }}</p>
-        <h4>Available On:</h4>
-        <div class="schedules">
-          <div v-for="(schedule, index) in doctor.schedules" :key="index">
-            <div class="schedule-item">
-              {{ schedule.day_of_week }}
-            </div>
-          </div>
-        </div>
-        <router-link
-          :to="{ name: 'BookAppointment', params: { doctorName: doctor.name } }"
-          class="book-btn"
-        >
-          View Availability
-        </router-link>
-      </div>
+    <div v-else-if="error" class="text-center py-8 text-red-500">
+      <p>There was an error loading the doctors list. {{ error }}</p>
+      <BaseButton variant="secondary" class="mt-4" @click="fetchAllSchedules()"
+        >Try Again</BaseButton
+      >
+    </div>
+    <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <DoctorCard v-for="doctor in doctors" :key="doctor.name" :doctor="doctor" />
     </div>
   </div>
 </template>
@@ -31,74 +19,15 @@
 import { useDoctorStore } from '@/stores/doctorStore'
 import { storeToRefs } from 'pinia'
 import { onMounted } from 'vue'
+import BaseButton from './ui/BaseButton.vue'
+import DoctorCard from './ui/DoctorCard.vue'
+import SpinnerComponent from './ui/SpinnerComponent.vue'
 
 const store = useDoctorStore()
+const { fetchAllSchedules } = store
 const { isLoading, error, doctors } = storeToRefs(store)
 
 onMounted(() => {
-  store.fetchAllSchedules()
+  fetchAllSchedules()
 })
 </script>
-
-<style scoped>
-.doctors {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
-  padding: 20px;
-}
-
-.doctor-card {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  height: 100%;
-
-  border: 1px solid #ddd;
-  padding: 15px;
-  margin-bottom: 15px;
-  border-radius: 5px;
-}
-
-.doctor-card h3 {
-  font-size: 1.2rem;
-  font-weight: 600;
-}
-
-.doctor-card .timezone {
-  font-size: 0.8rem;
-  color: #666;
-  margin-bottom: 10px;
-}
-
-.schedules {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
-  margin-bottom: 10px;
-}
-
-.schedule-item {
-  font-size: 0.8rem;
-  color: #666;
-  margin-bottom: 5px;
-  padding: 5px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  background-color: #f5f5f5;
-  display: inline-block;
-
-  margin-right: 5px;
-  margin-bottom: 5px;
-}
-
-.book-btn {
-  display: inline-block;
-  background-color: #4caf50;
-  color: white;
-  padding: 10px 15px;
-  text-decoration: none;
-  border-radius: 5px;
-  text-align: center;
-}
-</style>

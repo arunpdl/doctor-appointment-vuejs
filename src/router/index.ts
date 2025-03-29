@@ -1,5 +1,3 @@
-import BookAppointmentView from '@/views/BookAppointmentView.vue'
-import BookingConfirmationView from '@/views/BookingConfirmationView.vue'
 import DoctorsView from '@/views/DoctorsView.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 
@@ -12,14 +10,19 @@ const router = createRouter({
       component: DoctorsView,
     },
     {
-      path: '/book/:doctorName',
-      name: 'BookAppointment',
-      component: BookAppointmentView,
+      path: '/doctor/:doctorName',
+      name: 'DoctorDetails',
+      component: () => import('@/views/DoctorDetailsView.vue'),
     },
     {
       path: '/booking-confirmation',
       name: 'BookingConfirmation',
-      component: BookingConfirmationView,
+      component: () => import('@/views/BookingConfirmationView.vue'),
+    },
+    {
+      path: '/my-appointments',
+      name: 'Appointments',
+      component: () => import('@/views/AppointmentListView.vue'),
     },
   ],
 })

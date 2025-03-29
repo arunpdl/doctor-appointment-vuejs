@@ -18,3 +18,15 @@ export interface DateOption {
   date: string
   dayOfWeek: string
 }
+
+export interface Appointment {
+  doctor: string
+  date: string
+  time: string
+  timezone: string
+}
+
+export interface SavedAppointment extends Appointment {
+  id: string
+  createdAt: string
+}

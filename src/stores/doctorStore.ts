@@ -1,4 +1,11 @@
-import type { DateOption, Doctor, DoctorSchedule } from '@/types/doctors'
+import type {
+  Appointment,
+  DateOption,
+  Doctor,
+  DoctorSchedule,
+  SavedAppointment,
+} from '@/types/doctors'
+import { generateAppointmentId } from '@/utils/appointmentHelper'
 import { addDays, format, isAfter, isBefore, isEqual, parse } from 'date-fns'
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
@@ -111,25 +118,21 @@ export const useDoctorStore = defineStore('doctors', () => {
     return slots
   }
 
-  function bookAppointment(
-    doctorName: string,
-    slot: { day: string; time: string; timestamp: number },
-  ) {
-    const bookedAppointments: Array<{
-      doctorName: string
-      day: string
-      time: string
-      timestamp: number
-    }> = JSON.parse(localStorage.getItem('appointments') || '[]')
+  function bookAppointment(slot: Appointment): SavedAppointment {
+    const bookedAppointments: Appointment[] = getBookedAppointments()
 
-    const newAppointment = { doctorName, ...slot }
-    bookedAppointments.push(newAppointment)
-    localStorage.setItem('appointments', JSON.stringify(bookedAppointments))
+    const newAppointment = {
+      ...slot,
+      id: generateAppointmentId(),
+      createdAt: new Date().toISOString(),
+    }
+    const updatedAppointments = [...bookedAppointments, newAppointment]
+    localStorage.setItem('appointments', JSON.stringify(updatedAppointments))
 
     return newAppointment
   }
 
-  function getBookedAppointments() {
+  function getBookedAppointments(): SavedAppointment[] {
     return JSON.parse(localStorage.getItem('appointments') || '[]')
   }
 
