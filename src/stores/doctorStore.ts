@@ -52,6 +52,7 @@ export const useDoctorStore = defineStore('doctors', () => {
       }
       const data = await response.json()
       schedules.value = data
+      return data
     } catch (err) {
       error.value = (err as Error).message
       console.error('Error fetching schedules:', err)

@@ -54,13 +54,13 @@ const sortedAppointments = computed(() => {
 
 const upcomingAppointments = computed(() => {
   return sortedAppointments.value.filter((appointment) => {
-    return new Date(appointment.date) >= new Date()
+    return new Date(appointment?.date) >= new Date()
   })
 })
 
 const pastAppointments = computed(() => {
   return sortedAppointments.value.filter((appointment) => {
-    return new Date(appointment.date) < new Date()
+    return new Date(appointment?.date) < new Date()
   })
 })
 
@@ -71,6 +71,10 @@ const handleScheduleAppointment = () => {
 }
 
 onMounted(() => {
-  appointments.value = getBookedAppointments()
+  try {
+    appointments.value = getBookedAppointments()
+  } catch (error) {
+    console.error('Error fetching appointments:', error)
+  }
 })
 </script>

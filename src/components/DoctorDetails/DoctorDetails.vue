@@ -33,6 +33,7 @@ const availableSlots = ref<DateOption[]>([])
 const availableTimeSlots = ref<string[]>([])
 const selectedDate = ref<string | null>(null)
 const selectedTime = ref<string | null>(null)
+const invalidDoctorError = ref<string | null>(null)
 
 onMounted(async () => {
   try {
@@ -42,6 +43,7 @@ onMounted(async () => {
       doctor.value = doctorInfo
       availableSlots.value = getAvailableDates(doctorInfo)
     } else {
+      invalidDoctorError.value = 'Doctor not found'
       throw new Error('Doctor not found')
     }
   } catch (err) {
@@ -98,8 +100,8 @@ const handleBookAppointment = () => {
   </div>
   <SpinnerComponent v-if="isLoading" size="large" />
 
-  <div v-else-if="error" class="text-center py-8 text-red-500">
-    <p>There was an error loading the doctor detail. {{ error }}</p>
+  <div v-else-if="error || invalidDoctorError" class="text-center py-8 text-red-500">
+    <p>There was an error loading the doctor detail. {{ error || invalidDoctorError }}</p>
     <BaseButton variant="secondary" class="mt-4" @click="fetchAllSchedules()">Try Again</BaseButton>
   </div>
 
